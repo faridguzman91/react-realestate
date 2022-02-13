@@ -1,4 +1,6 @@
-# real estate app with firebase user and progress management
+# real estate app 
+
+with firebase user and progress management
 
 
 ### `npm start`
