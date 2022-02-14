@@ -49,6 +49,7 @@ function SignIn() {
               type={showPassword ? "text" : "password"}
               className="passwordInput"
               value={password}
+              id="password"
               onChange={onChange}
             />
             <img

@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRightIcon.svg";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { db } from '../firebase.config.js'
+import Profile from "./Profile";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,13 +31,54 @@ function SignUp() {
     }));
   };
 
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    // https://firebase.google.com/docs/auth/web/manage-users
+    // https://firebase.google.com/docs/auth/web/start
+
+    try {
+
+      //get auth value from firebase function getAuth
+      const auth = getAuth();
+
+      //register users with firebase: create user with email and password function, return promise
+      //take 3 arguments, email, auth, and password
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      //get user info from userCredentials
+
+      const user = userCredential.user;
+
+      // update Profile, and display name with currentUser
+
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+
+      //redirect to home from this function, otherwise catch error and not redirect
+
+      navigate('/')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+
   return (
     <>
       <div className="pageContainer">
         <header>
           <p className="pageHeader">Welcome back!</p>
         </header>
-        <form action="">
+        <form onSubmit={onSubmit}>
           <input
             type="text"
             className="nameInput"
@@ -57,6 +101,8 @@ function SignUp() {
               type={showPassword ? "text" : "password"}
               className="passwordInput"
               value={password}
+              id='password'
+              placeholder="password"
               onChange={onChange}
             />
             <img
