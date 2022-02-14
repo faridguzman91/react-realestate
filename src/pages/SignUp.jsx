@@ -1,10 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {toast} from 'react-toastify'
 import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRightIcon.svg";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { db } from '../firebase.config.js'
+import {doc, setDoc, serverTimestamp} from 'firebase/firestore'
 import Profile from "./Profile";
 
 function SignUp() {
@@ -38,7 +40,6 @@ function SignUp() {
     // https://firebase.google.com/docs/auth/web/start
 
     try {
-
       //get auth value from firebase function getAuth
       const auth = getAuth();
 
@@ -61,11 +62,28 @@ function SignUp() {
         displayName: name,
       });
 
+      //https://firebase.google.com/docs/firestore/manage-data/add-data
+
+      //copy everything from formData State (name, email, password)
+      //delete password, not in db (security)
+      //set server timestamp
+      //set doc update db add user to user collection
+
+      //https://github.com/firebase/snippets-web/blob/1c4c6834f310bf53a98b3fa3c2e2191396cacd69/snippets/firestore-next/test-firestore/set_document.js#L8-L15
+
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+
       //redirect to home from this function, otherwise catch error and not redirect
 
-      navigate('/')
+      navigate("/");
     } catch (error) {
-      console.log(error);
+
+      //react-toast error alert
+      toast.error('something went wrong')
     }
   }
 

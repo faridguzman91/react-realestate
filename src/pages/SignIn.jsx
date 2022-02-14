@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import {toast} from 'react-toastify'
 import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRightIcon.svg";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +20,6 @@ function SignIn() {
 
   const navigate = useNavigate();
 
-
   //get the id of the element that triggers the event event.target.id
 
   const onChange = (event) => {
@@ -28,13 +29,41 @@ function SignIn() {
     }));
   };
 
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      //try getting auth and sign in function parameters
+      const auth = getAuth();
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      //if user credentials matches user in db
+      // reditect homepage else
+      //error
+
+      if (userCredential.user) {
+        navigate("/");
+      }
+    } catch (error) {
+      // console.log(error);
+
+      //react-toast error alert
+      toast.error("bad user credentials");
+    }
+  };
+
   return (
     <>
       <div className="pageContainer">
         <header>
           <p className="pageHeader">Welcome back!</p>
         </header>
-        <form action="">
+        <form onSubmit={onSubmit}>
           <input
             type="text"
             className="emailInput"
