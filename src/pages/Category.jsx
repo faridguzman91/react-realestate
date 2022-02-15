@@ -12,6 +12,7 @@ import {
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import ListingItem from "../components/ListingItem";
 
 //hot to get / retrieve data
 //https://firebase.google.com/docs/database/web/lists-of-data
@@ -97,17 +98,17 @@ function Category() {
 
       {/* if loading state is true, show spinner component else if false, show listings array , then if length of listings array is more than nothing display main component  map all data, name in a list within listing object*/}
 
-      {loading ? 
+      {loading ? (
         <Spinner />
-       : listings && listings.length > 0 ? (
+      ) : listings && listings.length > 0 ? (
         <>
-        <main>
+          <main>
             <ul className="categoryListings">
-                {listings.map((listing) => (
-                    <h3 key={listing.id}>{listing.data.name}</h3>
-                ))}
+             {listings.map((listing) => (
+                    <ListingItem listing={listing.data} id={listing.id} key={listing.id}/>
+                ))} 
             </ul>
-        </main>
+          </main>
         </>
       ) : (
         <p>No listings for {params.categoryName}</p>
