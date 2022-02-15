@@ -8,6 +8,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase
 import { db } from '../firebase.config.js'
 import {doc, setDoc, serverTimestamp} from 'firebase/firestore'
 import Profile from "./Profile";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -144,6 +145,7 @@ function SignUp() {
         </form>
 
         {/* google oauth */}
+        <OAuth />
 
         <Link to="/sign-in" className="registerLink">
           Sign In Instead
