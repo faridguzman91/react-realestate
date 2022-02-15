@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import {ToastContainer} from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
-
+import Category from "./pages/Category";
 import PrivateRoute from "./components/PrivateRoute";
 import Explore from "./pages/Explore";
 import Offers from "./pages/Offers";
@@ -19,6 +19,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Explore />} />
           <Route path="/offers" element={<Offers />} />
+          <Route path="/offers" element={<Offers />} />
+          {/* query will look if its sell or rent category (categoryName)  */}
+          <Route path="/category/:categoryName" element={<Category />} />
           {/* <Route path="/profile" element={<Profile />} /> */}
           <Route path="/profile" element={<PrivateRoute />}>
             {/* render the outlet from privateroute, redirect to sign-in when not logged in */}
