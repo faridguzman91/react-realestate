@@ -91,13 +91,42 @@ function Listing() {
           </li>
           <li>{listing.parking && "Parking spot"}</li>
           <li>{listing.furnished && "Furnished"}</li>
-
           <p className="listingLocationTitle">Location</p>
-
           {/* map */}
+          {/* https://react-leaflet.js.org/ */}
+          {/* https://react-leaflet.js.org/docs/example-popup-marker/ */}
+          {/* <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={position}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </MapContainer> */}
+          <div className="leafletContainer">
+            <MapContainer
+              style={{ height: "100%", width: "100%" }}
+              center={[listing.geolocation.lat, listing.geolocation.lng]}
+              zoom={13}
+              scrollWheelZoom={false}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              <Marker
+                position={[listing.geolocation.lat, listing.geolocation.lng]}
+              >
+                <Popup>{listing.location}</Popup>
+              </Marker>
+            </MapContainer>
+          </div>
           {/* 
           if current user is auth and loggrd in - read user reference then create link to contact listing poster */}
-
           {auth.currentUser?.uid !== listing.userRef && (
             <Link
               to={`/contact/${listing.userRef}?listingName=${listing.name}`}
