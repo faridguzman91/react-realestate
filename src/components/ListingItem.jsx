@@ -13,8 +13,10 @@ function ListingItem({ listing, id, onDelete }) {
         to={`/category/${listing.type}/${id}`}
         className="categoryListingLink"
       >
+
+        {/* //for some reason the imageUrl wont set the 1st item of the array as head picture, so i removed the array index of imageUrls, check the fire base listings collections */}
         <img
-          src={listing.imageUrls[0]}
+          src={listing.imageUrls}
           alt={listing.name}
           className="categoryListingImg"
         />
