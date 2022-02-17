@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
 
 function CreateListing() {
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
@@ -41,9 +42,62 @@ function CreateListing() {
     longitude,
   } = formData;
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData)
+    // console.log(formData)
+
+    setLoading(true);
+
+    //onSubmit, check if discout price if equal or greater than regular price, toastify error
+
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("discounted price needs to be less than regular price");
+      return;
+    }
+
+    //onSubmit, check if the amount of uploaded images is bigger thaan 6, toastify error
+
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("max 6 images");
+      return;
+    }
+
+    let geolocation = {};
+    let location;
+
+    if (geolocationEnabled) {
+      //fetch geocoding data from api site , await response, onSubmit async, from address and key (cloud)
+      //https://console.cloud.google.com/apis/credentials?project=react-housemarketplaceapp
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
+      );
+
+      const data = await response.json();
+
+      // console.log(data);
+
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
+
+      location = data.status === 'ZERO_RESULTS' ? undefined : data.results[0]?.formatted_address
+
+      if(location === undefined || location.includes('undefined')) {
+        setLoading(false)
+        toast.error('please enter a correct address')
+        return
+      }
+
+    } else {
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
+      location = address;
+
+      // console.log(geolocation, location)
+    }
+
+    setLoading(false);
   };
 
   const onMutate = (event) => {
@@ -73,7 +127,7 @@ function CreateListing() {
         ...prevState,
 
         //if the value on the left is not a boolean (null),  use target value (right)
-        [event.target.id]: boolean ?? event.target.value
+        [event.target.id]: boolean ?? event.target.value,
       }));
     }
   };
@@ -250,12 +304,12 @@ function CreateListing() {
           ></textarea>
 
           {!geolocationEnabled && (
-            <div className="formLatLng" flex>
+            <div className="formLatLng flex">
               <div>
                 <label className="formLabel">Latitude</label>
                 <input
-                  type="number"
                   className="formInputSmall"
+                  type="number"
                   id="latitude"
                   value={latitude}
                   onChange={onMutate}
@@ -265,8 +319,8 @@ function CreateListing() {
               <div>
                 <label className="formLabel">Longitude</label>
                 <input
-                  type="number"
                   className="formInputSmall"
+                  type="number"
                   id="longitude"
                   value={longitude}
                   onChange={onMutate}
