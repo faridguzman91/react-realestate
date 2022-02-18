@@ -7,7 +7,7 @@ import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { db } from '../firebase.config.js'
 import {doc, setDoc, serverTimestamp} from 'firebase/firestore'
-import Profile from "./Profile";
+// import Profile from "./Profile";
 import OAuth from "../components/OAuth";
 
 function SignUp() {

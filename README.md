@@ -13,6 +13,9 @@ added react-toastify pkg for error messages onSubmit errors (async catch)
 
 storage rules: user delete images if user > auth = 0, resource size is < 2mb jpgs pngs etc
 
+february 18 > added swiper slider from npm slider
+february 18 > added react-leaflet to explore page
+
 
 ### `npm start`
 
