@@ -109,15 +109,19 @@ function Profile() {
 
   //create onDelete functionality, (Listing Item.jsx check) confirm if you want to delete on the prompt, THEN await deleteDoc function request , then updateListing , with the current listingIds available, and display on reload (setListings(Updated))
 
-  const onDelete = async (listingId) => {
-    if(window.confirm('are you sure u wanna delete?')) {
-      await deleteDoc(doc(db, 'listings', listingId))
+  //https://firebase.google.com/docs/firestore/manage-data/delete-data
 
-      const updatedListings = listings.filter((listing) => listing.id !== listingId )
-      setListings(updatedListings)
-      toast.success('Successfully deleted listing!')
+  const onDelete = async (listingId) => {
+    if (window.confirm("are you sure u wanna delete?")) {
+      await deleteDoc(doc(db, "listings", listingId));
+
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingId
+      );
+      setListings(updatedListings);
+      toast.success("Successfully deleted listing!");
     }
-  }
+  };
 
   return (
     <div className="profile">

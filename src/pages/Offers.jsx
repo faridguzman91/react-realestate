@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+
 import {
   collection,
   getDocs,
@@ -7,7 +7,7 @@ import {
   where,
   orderBy,
   limit,
-  startAfter,
+
 } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
@@ -35,7 +35,7 @@ function Offers() {
 
   //use params [sell/rent] to redirect category
 
-  const params = useParams();
+  // const params = useParams();
 
   useEffect(() => {
     const fetchListings = async () => {

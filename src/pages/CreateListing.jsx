@@ -142,7 +142,7 @@ function CreateListing() {
                 console.log("Upload is running");
                 break;
               default:
-                break;
+            
             }
           },
           (error) => {
